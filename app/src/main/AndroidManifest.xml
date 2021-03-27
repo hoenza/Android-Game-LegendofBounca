@@ -9,8 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LegendofBounca">
-        <activity android:name=".Activities.GravityActivity"></activity>
-        <activity android:name=".Activities.GyroscopeActivity" />
+        <activity android:name=".Activities.GameActivity"></activity>
+        <activity
+            android:name=".Activities.GravityActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".Activities.GyroscopeActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"></activity>
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
