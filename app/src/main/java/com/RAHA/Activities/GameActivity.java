@@ -1,68 +1,64 @@
 package com.RAHA.Activities;
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.RAHA.Logic.Room;
 import com.RAHA.R;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GameActivity extends Activity {
+public abstract class GameActivity extends Activity {
+
+    Room room = new Room();
+    SensorManager sensorManager;
+    Sensor sensor;
+    protected float timestamp;
+    protected static final float NS2S = 1.0f / 1000000000.0f;
+    protected abstract void  initSensor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        initSensor();
+        //This comments are for when we want to present this project to TAs: Don't remove!
         //get current layout object of the game: id is defined in activity_game.xml
         ConstraintLayout game_layout = findViewById(R.id.game_layout);
 
-        //adding a touch listener to the current layout: we pass a touch listener as callback function
-        game_layout.setOnTouchListener(new View.OnTouchListener() {
+        //https://stackoverflow.com/questions/3591784/views-getwidth-and-getheight-returns-0
+        game_layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //https://stackoverflow.com/questions/8182513/ontouch-event-of-ontouchlistener-gets-called-twice-in-android
-                if (event.getAction() != MotionEvent.ACTION_DOWN)
-                    return false;
-                ImageView ballImage = new ImageView(getApplicationContext());
-                ballImage.setImageResource(R.drawable.ball);
-
-                //This comments are for when we want to present this project to TAs: Don't remove!
-                //https://stackoverflow.com/questions/2994494/how-do-i-create-an-imageview-in-java-code-within-an-existing-layout
-
-                //LayoutParams are used by views to tell their parents how they want to be laid out. See ViewGroup Layout Attributes for a list of all child view attributes that this class supports.
-                ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(
-                        //WRAP_CONTENT, which means that the view wants to be just big enough to enclose its content (plus padding)
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
-                );
-                int ball_radius = 200;
-                ballParams.height = ball_radius;
-                ballParams.width = ball_radius;
-                int left = randInt(ball_radius / 2, game_layout.getWidth() - ball_radius / 2);
-                int top = randInt(ball_radius / 2, game_layout.getHeight() - ball_radius / 2);
-                System.out.println((int) event.getX());
-                System.out.println((int) event.getY());
-                ballImage.setX(left);
-                ballImage.setY(top);
-
-                game_layout.addView(ballImage, ballParams);
-                return true;
+            public void onGlobalLayout() {
+                room.setSize(game_layout.getWidth(), game_layout.getHeight());
+                game_layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                insertBallOnRandomPoint(game_layout);
             }
-
-            ;
         });
+    }
+
+    void insertBallOnRandomPoint(ConstraintLayout game_layout) {
+        //https://stackoverflow.com/questions/2994494/how-do-i-create-an-imageview-in-java-code-within-an-existing-layout
+        ImageView ballImage = new ImageView(getApplicationContext());
+        ballImage.setImageResource(R.drawable.ball);
+
+        //LayoutParams are used by views to tell their parents how they want to be laid out. See ViewGroup Layout Attributes for a list of all child view attributes that this class supports.
+        int ball_radius = room.getBallRadius();
+        ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(ball_radius, ball_radius);
+
+        int ball_x = randInt(ball_radius, game_layout.getWidth() - ball_radius);
+        int ball_y = randInt(ball_radius, game_layout.getHeight() - ball_radius);
+        ballImage.setX(ball_x);
+        ballImage.setY(ball_y);
+
+        game_layout.addView(ballImage, ballParams);
+        room.addBall(ball_x, ball_y);
     }
 
     int randInt(int min, int max) {

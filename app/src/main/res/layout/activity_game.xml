@@ -7,5 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".Activities.GameActivity">
 
+    <Button
+        android:id="@+id/button_gyroscope"
+        android:layout_width="97dp"
+        android:layout_height="49dp"
+        android:background="@android:color/holo_blue_bright"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="shoot"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
