@@ -1,11 +1,14 @@
 package com.RAHA.Activities;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -19,14 +22,13 @@ public abstract class GameActivity extends Activity {
     SensorManager sensorManager;
     Sensor sensor;
     protected float timestamp;
-    protected static final float NS2S = 1.0f / 1000000000.0f;
     protected abstract void  initSensor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("new game activity created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         initSensor();
         //This comments are for when we want to present this project to TAs: Don't remove!
         //get current layout object of the game: id is defined in activity_game.xml
@@ -36,11 +38,23 @@ public abstract class GameActivity extends Activity {
         game_layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                System.out.println("setting ball");
                 room.setSize(game_layout.getWidth(), game_layout.getHeight());
                 game_layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 insertBallOnRandomPoint(game_layout);
             }
         });
+        Button btnShoot = (Button) findViewById(R.id.button_shoot);
+        View.OnClickListener handler = new View.OnClickListener() {
+
+            public void onClick(View v) {
+                if (v == btnShoot) {
+                    System.out.println("shoot button pressed");
+                    room.shootBall();
+                }
+            }
+        };
+        btnShoot.setOnClickListener(handler);
     }
 
     void insertBallOnRandomPoint(ConstraintLayout game_layout) {

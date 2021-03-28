@@ -8,7 +8,7 @@
     tools:context=".Activities.GameActivity">
 
     <Button
-        android:id="@+id/button_gyroscope"
+        android:id="@+id/button_shoot"
         android:layout_width="97dp"
         android:layout_height="49dp"
         android:background="@android:color/holo_blue_bright"

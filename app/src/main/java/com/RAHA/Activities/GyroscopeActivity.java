@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 
+import com.RAHA.Config.Config;
+
 public class GyroscopeActivity extends GameActivity {
     protected void initSensor() {
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -15,7 +17,7 @@ public class GyroscopeActivity extends GameActivity {
         // This time step's delta rotation to be multiplied by the current rotation
         // after computing it from the gyro sample data.
         if (timestamp != 0) {
-            final float dT = (event.timestamp - timestamp) * NS2S;
+            final float dT = (event.timestamp - timestamp) * Config.NS2S;
             // Axis of the rotation sample, not normalized yet.
             //values[0]: Angular speed around the x-axis
             //values[1]: Angular speed around the y-axis
