@@ -14,8 +14,6 @@ public class Room {
     Ball ball = null;
     int ballRadius = 200;
     public float angleX, angleY, angleZ;
-    float muS = (float) 0.15;
-    float muK = (float) 0.07;
     ImageView ballImage;
 
     public Room() {
@@ -48,6 +46,7 @@ public class Room {
 //        ball.updateAccelerationByAngles(angleX, angleY, angleZ);
 //        ball.updateVelocity(intervalSeconds, this);
         ball.updateAcceleration(angleX, angleY, angleZ);
+        ball.updateVelocity(dt);
         ball.updatePlace(dt);
         refreshScene();
     }

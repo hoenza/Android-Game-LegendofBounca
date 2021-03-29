@@ -12,12 +12,11 @@ public class GyroscopeActivity extends GameActivity implements SensorEventListen
     protected void initSensor() {
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("gyro sensor changed");
-        System.out.println("AAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRr");
         // This time step's delta rotation to be multiplied by the current rotation
         // after computing it from the gyro sample data.
         if (timestamp != 0) {
@@ -42,11 +41,9 @@ public class GyroscopeActivity extends GameActivity implements SensorEventListen
 
     @Override
     protected void updateAngles(float axisX, float axisY, float axisZ, float dt) {
-        System.out.println("here in gyro");
         room.angleX += axisX * dt;
         room.angleY += axisY * dt;
         room.angleX += axisZ * dt;
-        System.out.println(String.format("angleX = %f, angleY = %f, angleZ=%f", room.angleX, room.angleY, room.angleZ));
     }
 
     @Override

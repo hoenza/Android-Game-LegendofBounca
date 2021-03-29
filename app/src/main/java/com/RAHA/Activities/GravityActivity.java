@@ -13,6 +13,7 @@ public class GravityActivity extends GameActivity implements SensorEventListener
     protected void initSensor() {
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
     @Override
     public void onSensorChanged(SensorEvent event) {

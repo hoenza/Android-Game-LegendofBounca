@@ -45,7 +45,7 @@ public abstract class GameActivity extends Activity implements SensorEventListen
                 insertBallOnRandomPoint(game_layout);
             }
         });
-        Button btnShoot = (Button) findViewById(R.id.button_shoot);
+        Button btnShoot = findViewById(R.id.button_shoot);
         View.OnClickListener handler = new View.OnClickListener() {
 
             public void onClick(View v) {
