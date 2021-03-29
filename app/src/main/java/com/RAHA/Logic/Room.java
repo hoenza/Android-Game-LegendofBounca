@@ -1,6 +1,7 @@
 package com.RAHA.Logic;
 
 import android.util.Pair;
+import android.widget.ImageView;
 
 import com.RAHA.Config.Config;
 
@@ -12,8 +13,10 @@ public class Room {
     int height = 0;
     Ball ball = null;
     int ballRadius = 200;
+    public float angleX, angleY, angleZ;
     float muS = (float) 0.15;
     float muK = (float) 0.07;
+    ImageView ballImage;
 
     public Room() {
         Timer t = new Timer();
@@ -21,7 +24,6 @@ public class Room {
             @Override
             public void run() {
                 if(this.hasDimensions() && ball != null){
-                    System.out.println("room is being ran");
                     runRoom(((double) Config.REFRESH_RATE) / 1000);
                 }
             }
@@ -32,14 +34,22 @@ public class Room {
         }, 0, (long) Config.REFRESH_RATE);
     }
 
+    private void refreshScene() {
+        if(ballImage != null) {
+            ballImage.setX(ball.x);
+            ballImage.setY(ball.y);
+        }
+    }
+
     protected synchronized void runRoom(double dt) {
-//        ball.updateAccelerationByAngles(angleX, angleY, angleZ);
 //        ball.updateVelocity(intervalSeconds, this);
 //        Pair<Double, Double> ballNewPositions = ball.getNextPosition(intervalSeconds);
 //        ball.handleWallCollision(ballNewPositions.first, ballNewPositions.second, this);
 //        ball.updateAccelerationByAngles(angleX, angleY, angleZ);
 //        ball.updateVelocity(intervalSeconds, this);
+        ball.updateAcceleration(angleX, angleY, angleZ);
         ball.updatePlace(dt);
+        refreshScene();
     }
 
     public void setSize(int width, int height) {
@@ -47,9 +57,9 @@ public class Room {
         this.height = height;
     }
 
-    public void addBall(int x, int y) {
+    public void addBall(ImageView ballImage, int x, int y) {
+        this.ballImage = ballImage;
         this.ball = new Ball(x, y);
-        System.out.println("add ball called");
     }
 
     public int getBallRadius() {
@@ -57,7 +67,6 @@ public class Room {
     }
 
     public void shootBall() {
-        System.out.println("ball is being shot");
         ball.shoot();
     }
 }

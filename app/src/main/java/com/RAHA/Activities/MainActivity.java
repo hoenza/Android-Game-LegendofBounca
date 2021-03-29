@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 if (v == btnGyroscope) {
-                    System.out.println("gyro button pressed");
                     Intent intentGyroscope = new Intent(MainActivity.this,
                             GyroscopeActivity.class);
                     startActivity(intentGyroscope);

@@ -1,28 +1,30 @@
 package com.RAHA.Activities;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.RAHA.Logic.Room;
 import com.RAHA.R;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class GameActivity extends Activity {
+public abstract class GameActivity extends Activity implements SensorEventListener {
 
-    Room room = new Room();
-    SensorManager sensorManager;
-    Sensor sensor;
+    protected Room room = new Room();
+    protected SensorManager sensorManager;
+    protected Sensor sensor;
     protected float timestamp;
-    protected abstract void  initSensor();
+    protected abstract void initSensor();
+    protected abstract void updateAngles(float axisX, float axisY, float axisZ, float dt);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,6 @@ public abstract class GameActivity extends Activity {
         game_layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                System.out.println("setting ball");
                 room.setSize(game_layout.getWidth(), game_layout.getHeight());
                 game_layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 insertBallOnRandomPoint(game_layout);
@@ -49,7 +50,6 @@ public abstract class GameActivity extends Activity {
 
             public void onClick(View v) {
                 if (v == btnShoot) {
-                    System.out.println("shoot button pressed");
                     room.shootBall();
                 }
             }
@@ -72,7 +72,7 @@ public abstract class GameActivity extends Activity {
         ballImage.setY(ball_y);
 
         game_layout.addView(ballImage, ballParams);
-        room.addBall(ball_x, ball_y);
+        room.addBall(ballImage, ball_x, ball_y);
     }
 
     int randInt(int min, int max) {
