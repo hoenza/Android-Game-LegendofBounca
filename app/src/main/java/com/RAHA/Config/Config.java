@@ -8,4 +8,5 @@ public class Config {
     public static float muK = (float) 0.07;
     public static float elasticLoss = (float) 0.9;
     public static int ballRadius = (int) 85;
+    public static int ballMass = (int) 10;
 }

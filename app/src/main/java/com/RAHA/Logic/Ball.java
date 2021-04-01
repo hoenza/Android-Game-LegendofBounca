@@ -7,13 +7,15 @@ import com.RAHA.Config.Config;
 import com.RAHA.Utils.Utils;
 
 import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Ball {
-    int m = 10;
     float x;
     float y;
-    float vx = 0, vy = 0;
-    float ax = 0, ay = 0;
+    float vx = 0;
+    float vy = 0;
+    float ax = 0;
+    float ay = 0;
 
     public Ball(int x, int y) {
         this.x = x;
@@ -21,21 +23,20 @@ public class Ball {
     }
 
     public void shoot() {
-        vx = (float) ((Math.random() - 0.5) * 3000);
-        vy = -(float) ((Math.random()) * 1500);
+        vx = (float) ((Math.random() - 0.5) * 4000);
+        vy = -(float) ((Math.random()) * 2000);
     }
 
     public void updatePlace(double dt, Room room) {
-        x = (float) ((1/2) * ax * Math.pow(dt, 2) + vx * dt + x);
-        y = (float) ((1/2) * ay * Math.pow(dt, 2) + vy * dt + y);
+        x += (float) (ax * Math.pow(dt, 2) / 2 + vx * dt);
+        y += (float) (ay * Math.pow(dt, 2) / 2 + vy * dt);
         handleWallCollision(room);
-//        System.out.println(String.format("x = %f, y=%f\nvx = %f, vy = %f\nax=%f, ay = %f", x, y, vx, vy, ax, ay));
     }
 
     public void updateAcceleration(float angleX, float angleY) {
-        double fX = m * Config.g * Math.sin(angleY);
-        double fY = m * Config.g * Math.sin(angleX);
-        double N = m * Config.g * Math.cos(Math.atan(Utils.magnitude(Math.sin(angleX), Math.sin(angleY)) / (Math.cos(angleX) + Math.cos(angleY))));
+        double fX = Config.ballMass * Config.g * Math.sin(angleY);
+        double fY = Config.ballMass * Config.g * Math.sin(angleX);
+        double N = Config.ballMass * Config.g * Math.cos(Math.atan(Utils.magnitude(Math.sin(angleX), Math.sin(angleY)) / (Math.cos(angleX) + Math.cos(angleY))));
 
         if (this.isMoving() || this.canMove(fX, fY, N)) {
             double frictionMagnitude = N * Config.muK;
@@ -51,21 +52,11 @@ public class Ball {
             fX = 0;
             fY = 0;
         }
-        ax = (float) fX / m;
-        ay = (float) fY / m;
+        ax = (float) fX / Config.ballMass;
+        ay = (float) fY / Config.ballMass;
 
         ax *= 200;
         ay *= 200;
-
-        Integer aMax = 10000;
-        if (ax <= -aMax)
-            ax = -aMax;
-        if (ax >= aMax)
-            ax = aMax;
-        if (ay <= -aMax)
-            ay = -aMax;
-        if (ay >= aMax)
-            ay = aMax;
     }
 
     public void updateVelocity(double dt) {
