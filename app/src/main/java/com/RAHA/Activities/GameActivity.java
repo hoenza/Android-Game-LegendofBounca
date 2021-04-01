@@ -1,5 +1,6 @@
 package com.RAHA.Activities;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,6 +32,7 @@ public abstract class GameActivity extends Activity implements SensorEventListen
         System.out.println("new game activity created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initSensor();
         //This comments are for when we want to present this project to TAs: Don't remove!
         //get current layout object of the game: id is defined in activity_game.xml
@@ -64,7 +66,8 @@ public abstract class GameActivity extends Activity implements SensorEventListen
 
         //LayoutParams are used by views to tell their parents how they want to be laid out. See ViewGroup Layout Attributes for a list of all child view attributes that this class supports.
         int ball_radius = room.getBallRadius();
-        ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(ball_radius, ball_radius);
+        int ball_width = 2 * ball_radius;
+        ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(ball_width, ball_width);
 
         int ball_x = randInt(ball_radius, game_layout.getWidth() - ball_radius);
         int ball_y = randInt(ball_radius, game_layout.getHeight() - ball_radius);

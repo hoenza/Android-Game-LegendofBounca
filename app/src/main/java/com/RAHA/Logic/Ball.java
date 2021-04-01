@@ -1,9 +1,12 @@
 package com.RAHA.Logic;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.RAHA.Config.Config;
 import com.RAHA.Utils.Utils;
+
+import java.util.Vector;
 
 public class Ball {
     int m = 10;
@@ -22,10 +25,11 @@ public class Ball {
         vy = -(float) ((Math.random()) * 150);
     }
 
-    public void updatePlace(double dt) {
+    public void updatePlace(double dt, Room room) {
         x = (float) ((1/2) * ax * Math.pow(dt, 2) + vx * dt + x);
         y = (float) ((1/2) * ay * Math.pow(dt, 2) + vy * dt + y);
-        System.out.println(String.format("x = %f, y=%f\nvx = %f, vy = %f\nax=%f, ay = %f", x, y, vx, vy, ax, ay));
+        handleWallCollision(room);
+//        System.out.println(String.format("x = %f, y=%f\nvx = %f, vy = %f\nax=%f, ay = %f", x, y, vx, vy, ax, ay));
     }
 
     public void updateAcceleration(float angleX, float angleY, float angleZ) {
@@ -53,6 +57,16 @@ public class Ball {
 
         ax *= 200;
         ay *= 200;
+
+        Integer aMax = 100;
+        if (ax <= -aMax)
+            ax = -aMax;
+        if (ax >= aMax)
+            ax = aMax;
+        if (ay <= -aMax)
+            ay = -aMax;
+        if (ay >= aMax)
+            ay = aMax;
     }
 
     public void updateVelocity(double dt) {
@@ -71,6 +85,34 @@ public class Ball {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void handleWallCollision(Room room) {
+        Vector<Integer> hitStatus = room.hitWallStatus(x, y);
+        if (hitStatus.contains(1)) {
+            y = Config.ballRadius;
+            if (vy < 0) {
+                vy = (float) (Math.abs(this.vy) * Math.sqrt(Config.elasticLoss));
+            }
+        }
+        else if(hitStatus.contains(2)) {
+            x = room.width - Config.ballRadius;
+            if (vx > 0) {
+                vx = (float) (-Math.abs(vx) * Math.sqrt(Config.elasticLoss));
+            }
+        }
+        else if(hitStatus.contains(3)) {
+            y = room.height - Config.ballRadius;
+            if (vy > 0) {
+                vy = (float) (-Math.abs(vy) * Math.sqrt(Config.elasticLoss));
+            }
+        }
+        else if(hitStatus.contains(4)) {
+            x = Config.ballRadius;
+            if (vx < 0) {
+                vx = (float) (Math.abs(vx) * Math.sqrt(Config.elasticLoss));
+            }
         }
     }
 }

@@ -25,8 +25,8 @@ public class GyroscopeActivity extends GameActivity implements SensorEventListen
             //values[0]: Angular speed around the x-axis
             //values[1]: Angular speed around the y-axis
             //values[2]: Angular speed around the z-axis
-            float axisY = -event.values[0];
-            float axisX = event.values[1];
+            float axisX = event.values[0];
+            float axisY = event.values[1];
             float axisZ = event.values[2];
             this.updateAngles(axisX, axisY, axisZ, dt);
 //            room.

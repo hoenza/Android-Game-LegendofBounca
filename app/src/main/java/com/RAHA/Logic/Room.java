@@ -1,18 +1,21 @@
 package com.RAHA.Logic;
 
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
 import com.RAHA.Config.Config;
 
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class Room {
     int width = 0;
     int height = 0;
     Ball ball = null;
-    int ballRadius = 200;
+    int ballRadius = Config.ballRadius;
     public float angleX, angleY, angleZ;
     ImageView ballImage;
 
@@ -34,8 +37,8 @@ public class Room {
 
     private void refreshScene() {
         if(ballImage != null) {
-            ballImage.setX(ball.x);
-            ballImage.setY(ball.y);
+            ballImage.setX(ball.x - ballRadius);
+            ballImage.setY(ball.y - ballRadius);
         }
     }
 
@@ -47,7 +50,7 @@ public class Room {
 //        ball.updateVelocity(intervalSeconds, this);
         ball.updateAcceleration(angleX, angleY, angleZ);
         ball.updateVelocity(dt);
-        ball.updatePlace(dt);
+        ball.updatePlace(dt, this);
         refreshScene();
     }
 
@@ -67,5 +70,24 @@ public class Room {
 
     public void shootBall() {
         ball.shoot();
+    }
+
+    public Vector<Integer> hitWallStatus(float x, float y) {
+//        Log.d("hitWallStatus >>>>>>", String.format("info width:%d, x:%f,    height:%d, y:%f", width, x, height, y));
+        Vector<Integer> output = new Vector<>();
+        if (y - Config.ballRadius <= 0)
+            output.add(1);
+        if (y + Config.ballRadius >= this.height)
+            output.add(3);
+        if (x - Config.ballRadius <= 0)
+            output.add(4);
+        if (x + Config.ballRadius >= this.width)
+            output.add(2);
+        Iterator value = output.iterator();
+//        Log.d(">>>>>>>>>>>>>>>>>>>>>>>>>", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        while (value.hasNext()) {
+            Log.d("heaaaeey", String.format(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%d", value.next()));
+        }
+        return output;
     }
 }
