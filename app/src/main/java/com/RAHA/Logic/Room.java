@@ -43,11 +43,6 @@ public class Room {
     }
 
     protected synchronized void runRoom(double dt) {
-//        ball.updateVelocity(intervalSeconds, this);
-//        Pair<Double, Double> ballNewPositions = ball.getNextPosition(intervalSeconds);
-//        ball.handleWallCollision(ballNewPositions.first, ballNewPositions.second, this);
-//        ball.updateAccelerationByAngles(angleX, angleY, angleZ);
-//        ball.updateVelocity(intervalSeconds, this);
         ball.updateAcceleration(angleX, angleY, angleZ);
         ball.updateVelocity(dt);
         ball.updatePlace(dt, this);
@@ -73,7 +68,6 @@ public class Room {
     }
 
     public Vector<Integer> hitWallStatus(float x, float y) {
-//        Log.d("hitWallStatus >>>>>>", String.format("info width:%d, x:%f,    height:%d, y:%f", width, x, height, y));
         Vector<Integer> output = new Vector<>();
         if (y - Config.ballRadius <= 0)
             output.add(1);

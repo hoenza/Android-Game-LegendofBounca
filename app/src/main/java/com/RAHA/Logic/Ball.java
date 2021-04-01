@@ -47,7 +47,6 @@ public class Ball {
             }
             fX += -Math.signum(vx) * Math.abs(frictionX);
             fY += -Math.signum(vy) * Math.abs(frictionY);
-//            Log.d("NG2", fX + "|" + fY + "|" + frictionMagnitude + "|" + frictionX + "|" + vx + "|" + vy);
         } else {
             fX = 0;
             fY = 0;
@@ -58,7 +57,7 @@ public class Ball {
         ax *= 200;
         ay *= 200;
 
-        Integer aMax = 100;
+        Integer aMax = 10000;
         if (ax <= -aMax)
             ax = -aMax;
         if (ax >= aMax)
@@ -76,7 +75,7 @@ public class Ball {
 
     private boolean canMove(double fX, double fY, double N) {
         double fMagnitude = Utils.magnitude(fX, fY);
-        double frictionMagnitude = N * Config.muK;
+        double frictionMagnitude = N * Config.muS;
         return fMagnitude > frictionMagnitude;
     }
 
