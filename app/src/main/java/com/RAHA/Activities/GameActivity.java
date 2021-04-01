@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.RAHA.Config.Config;
 import com.RAHA.Logic.Room;
 import com.RAHA.R;
 import java.util.concurrent.ThreadLocalRandom;
@@ -65,12 +66,10 @@ public abstract class GameActivity extends Activity implements SensorEventListen
         ballImage.setImageResource(R.drawable.ball);
 
         //LayoutParams are used by views to tell their parents how they want to be laid out. See ViewGroup Layout Attributes for a list of all child view attributes that this class supports.
-        int ball_radius = room.getBallRadius();
-        int ball_width = 2 * ball_radius;
-        ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(ball_width, ball_width);
+        ConstraintLayout.LayoutParams ballParams = new ConstraintLayout.LayoutParams(2*Config.ballRadius, 2* Config.ballRadius);
 
-        int ball_x = randInt(ball_radius, game_layout.getWidth() - ball_radius);
-        int ball_y = randInt(ball_radius, game_layout.getHeight() - ball_radius);
+        int ball_x = randInt(Config.ballRadius, game_layout.getWidth() - Config.ballRadius);
+        int ball_y = randInt(Config.ballRadius, game_layout.getHeight() - Config.ballRadius);
         ballImage.setX(ball_x);
         ballImage.setY(ball_y);
 
