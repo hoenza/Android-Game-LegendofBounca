@@ -21,8 +21,8 @@ public class Ball {
     }
 
     public void shoot() {
-        vx = (float) ((Math.random() - 0.5) * 300);
-        vy = -(float) ((Math.random()) * 150);
+        vx = (float) ((Math.random() - 0.5) * 3000);
+        vy = -(float) ((Math.random()) * 1500);
     }
 
     public void updatePlace(double dt, Room room) {

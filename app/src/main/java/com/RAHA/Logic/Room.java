@@ -83,11 +83,6 @@ public class Room {
             output.add(4);
         if (x + Config.ballRadius >= this.width)
             output.add(2);
-        Iterator value = output.iterator();
-//        Log.d(">>>>>>>>>>>>>>>>>>>>>>>>>", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        while (value.hasNext()) {
-            Log.d("heaaaeey", String.format(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%d", value.next()));
-        }
         return output;
     }
 }
