@@ -17,7 +17,7 @@ public class Room {
 
     class RefreshRoom extends TimerTask {
         public void run() {
-            runRoom(0.015);
+            updateRoom(0.015);
         }
     }
 
@@ -33,7 +33,7 @@ public class Room {
         }
     }
 
-    protected synchronized void runRoom(double dt) {
+    protected synchronized void updateRoom(double dt) {
         ball.updateAcceleration(angleX, angleY);
         ball.updateVelocity(dt);
         ball.updatePlace(dt, this);
