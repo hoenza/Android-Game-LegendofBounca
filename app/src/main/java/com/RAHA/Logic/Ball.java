@@ -1,5 +1,6 @@
 package com.RAHA.Logic;
 
+import android.content.pm.ConfigurationInfo;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -36,27 +37,23 @@ public class Ball {
     public void updateAcceleration(float angleX, float angleY) {
         double fX = Config.ballMass * Config.g * Math.sin(angleY);
         double fY = Config.ballMass * Config.g * Math.sin(angleX);
-        double N = Config.ballMass * Config.g * Math.cos(Math.atan(Utils.magnitude(Math.sin(angleX), Math.sin(angleY)) / (Math.cos(angleX) + Math.cos(angleY))));
+        double theta = Math.atan(Utils.magnitude(Math.sin(angleX), Math.sin(angleY)) / (Math.cos(angleX) + Math.cos(angleY)));
+        double N = Config.ballMass * Config.g * Math.cos(theta);
 
-        if (this.isMoving() || this.canMove(fX, fY, N)) {
-            double frictionMagnitude = N * Config.muK;
-            double frictionX = 0;
-            double frictionY = 0;
-            if (Utils.magnitude(vx, vy) > 0) {
-                frictionX = frictionMagnitude * vx / Utils.magnitude(vx, vy);
-                frictionY = frictionMagnitude * vy / Utils.magnitude(vx, vy);
-            }
-            fX += -Math.signum(vx) * Math.abs(frictionX);
-            fY += -Math.signum(vy) * Math.abs(frictionY);
-        } else {
-            fX = 0;
-            fY = 0;
+        if (isStaticFriction(fX, fY, N)) {
+            ax = 0; ay = 0;
+            return;
         }
-        ax = (float) fX / Config.ballMass;
-        ay = (float) fY / Config.ballMass;
+        if (Utils.magnitude(vx, vy) == 0) {
+            ax = (float) (fX / Config.ballMass / Config.ballMass);
+            ay = (float) (fY / Config.ballMass / Config.ballMass);
+            return;
+        }
 
-        ax *= 200;
-        ay *= 200;
+        double frictionX = frictionMagnitude(N) * Math.abs(vx) / Utils.magnitude(vx, vy);
+        double frictionY = frictionMagnitude(N) * Math.abs(vy) / Utils.magnitude(vx, vy);
+        ax = (float) (fX- (Math.signum(vx) * frictionX)) / Config.ballMass / Config.ballMass;
+        ay = (float) (fY- (Math.signum(vy) * frictionY)) / Config.ballMass / Config.ballMass;
     }
 
     public void updateVelocity(double dt) {
@@ -65,17 +62,21 @@ public class Ball {
     }
 
     private boolean canMove(double fX, double fY, double N) {
-        double fMagnitude = Utils.magnitude(fX, fY);
-        double frictionMagnitude = N * Config.muS;
-        return fMagnitude > frictionMagnitude;
+        double forceMagnitude = Utils.magnitude(fX, fY);
+        double staticFricitionTreshold = Config.muS * N;
+        return forceMagnitude > staticFricitionTreshold;
     }
 
     private boolean isMoving() {
-        if (Utils.magnitude(vx, vy) < 0.1) {
-            return false;
-        } else {
-            return true;
-        }
+        return Utils.magnitude(vx, vy) < Config.stopThreshold;
+    }
+
+    private double frictionMagnitude(double N) {
+        return N * Config.muK;
+    }
+
+    private boolean isStaticFriction(double fX, double fY, double N) {
+        return !isMoving() && !canMove(fX, fY, N);
     }
 
     private void handleWallCollision(Room room) {
