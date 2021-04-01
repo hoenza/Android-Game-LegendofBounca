@@ -10,3 +10,4 @@ public class Config {
     public static int ballRadius = (int) 85;
     public static int ballMass = (int) 10;
 }
+

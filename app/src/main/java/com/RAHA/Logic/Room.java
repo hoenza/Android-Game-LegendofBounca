@@ -1,12 +1,9 @@
 package com.RAHA.Logic;
 
-import android.util.Log;
-import android.util.Pair;
 import android.widget.ImageView;
 
 import com.RAHA.Config.Config;
 
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -18,20 +15,15 @@ public class Room {
     public float angleX, angleY, angleZ;
     ImageView ballImage;
 
+    class RefreshRoom extends TimerTask {
+        public void run() {
+            runRoom(0.015);
+        }
+    }
+
     public Room() {
         Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(this.hasDimensions() && ball != null){
-                    runRoom(((double) Config.REFRESH_RATE) / 1000);
-                }
-            }
-
-            private boolean hasDimensions() {
-                return width != 0 && height != 0;
-            }
-        }, 0, (long) Config.REFRESH_RATE);
+        t.schedule(new RefreshRoom(), 500, (long) Config.REFRESH_RATE);
     }
 
     private void refreshScene() {
