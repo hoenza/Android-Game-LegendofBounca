@@ -15,7 +15,6 @@ public class Room {
     int width = 0;
     int height = 0;
     Ball ball = null;
-    int ballRadius = Config.ballRadius;
     public float angleX, angleY, angleZ;
     ImageView ballImage;
 
@@ -37,13 +36,13 @@ public class Room {
 
     private void refreshScene() {
         if(ballImage != null) {
-            ballImage.setX(ball.x - ballRadius);
-            ballImage.setY(ball.y - ballRadius);
+            ballImage.setX(ball.x - Config.ballRadius);
+            ballImage.setY(ball.y - Config.ballRadius);
         }
     }
 
     protected synchronized void runRoom(double dt) {
-        ball.updateAcceleration(angleX, angleY, angleZ);
+        ball.updateAcceleration(angleX, angleY);
         ball.updateVelocity(dt);
         ball.updatePlace(dt, this);
         refreshScene();
@@ -57,10 +56,6 @@ public class Room {
     public void addBall(ImageView ballImage, int x, int y) {
         this.ballImage = ballImage;
         this.ball = new Ball(x, y);
-    }
-
-    public int getBallRadius() {
-        return ballRadius;
     }
 
     public void shootBall() {

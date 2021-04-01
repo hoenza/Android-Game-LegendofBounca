@@ -32,7 +32,7 @@ public class Ball {
 //        System.out.println(String.format("x = %f, y=%f\nvx = %f, vy = %f\nax=%f, ay = %f", x, y, vx, vy, ax, ay));
     }
 
-    public void updateAcceleration(float angleX, float angleY, float angleZ) {
+    public void updateAcceleration(float angleX, float angleY) {
         double fX = m * Config.g * Math.sin(angleY);
         double fY = m * Config.g * Math.sin(angleX);
         double N = m * Config.g * Math.cos(Math.atan(Utils.magnitude(Math.sin(angleX), Math.sin(angleY)) / (Math.cos(angleX) + Math.cos(angleY))));
@@ -95,19 +95,19 @@ public class Ball {
                 vy = (float) (Math.abs(this.vy) * Math.sqrt(Config.elasticLoss));
             }
         }
-        else if(hitStatus.contains(2)) {
+        if(hitStatus.contains(2)) {
             x = room.width - Config.ballRadius;
             if (vx > 0) {
                 vx = (float) (-Math.abs(vx) * Math.sqrt(Config.elasticLoss));
             }
         }
-        else if(hitStatus.contains(3)) {
+        if(hitStatus.contains(3)) {
             y = room.height - Config.ballRadius;
             if (vy > 0) {
                 vy = (float) (-Math.abs(vy) * Math.sqrt(Config.elasticLoss));
             }
         }
-        else if(hitStatus.contains(4)) {
+        if(hitStatus.contains(4)) {
             x = Config.ballRadius;
             if (vx < 0) {
                 vx = (float) (Math.abs(vx) * Math.sqrt(Config.elasticLoss));
