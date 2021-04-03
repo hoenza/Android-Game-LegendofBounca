@@ -17,7 +17,7 @@ public class Room {
 
     class RefreshRoom extends TimerTask {
         public void run() {
-            updateRoom(0.015);
+            updateRoom((float)Config.REFRESH_RATE/1000);
         }
     }
 
