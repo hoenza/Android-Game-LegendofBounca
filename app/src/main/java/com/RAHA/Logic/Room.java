@@ -26,7 +26,7 @@ public class Room {
         t.schedule(new RefreshRoom(), 500, (long) Config.REFRESH_RATE);
     }
 
-    private void refreshScene() {
+    private void refreshBall() {
         if(ballImage != null) {
             ballImage.setX(ball.x - Config.ballRadius);
             ballImage.setY(ball.y - Config.ballRadius);
@@ -37,7 +37,7 @@ public class Room {
         ball.updateAcceleration(angleX, angleY);
         ball.updateVelocity(dt);
         ball.updatePlace(dt, this);
-        refreshScene();
+        refreshBall();
     }
 
     public void setSize(int width, int height) {
